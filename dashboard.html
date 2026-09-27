@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carron Eleck - Tableau de bord</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dashboard-body">
+
+    <div class="dashboard">
+
+        <!-- HEADER -->
+        <header>
+            <a href="index.html" class="logo">
+                <img src="logo/logo.png" alt="Carron Eleck">
+                <span>Carron Eleck</span>
+            </a>
+
+            <nav>
+                <a href="index.html">Accueil</a>
+                <a href="presentation.html">Présentation</a>
+                <a href="services.html">Services</a>
+                <a href="dashboard.html" class="active">Tableau de bord</a>
+            </nav>
+        </header>
+
+
+        <!-- CONTENU DU DASHBOARD -->
+        <main class="dashboard-content">
+
+            <!-- TITRE -->
+            <div class="dashboard-title">
+
+                <div>
+                    <p class="dashboard-small-title">⚡ ESPACE ADMIN</p>
+
+                    <h1>Tableau de bord</h1>
+
+                    <p>
+                        Bienvenue à vous Monsieur Carron Eleck.
+                    </p>
+                </div>
+
+                <button class="logout" onclick="deconnexion()">
+                    Déconnexion
+                </button>
+
+            </div>
+
+
+            <!-- STATISTIQUES -->
+            <section class="dashboard-stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📋
+                    </div>
+
+                    <div>
+                        <h3 id="nombreDevis">0</h3>
+                        <p>Demandes de devis</p>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        👥
+                    </div>
+
+                    <div>
+                        <h3 id="nombreClients">0</h3>
+                        <p>Clients</p>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🔧
+                    </div>
+
+                    <div>
+                        <h3 id="nombreInterventions">0</h3>
+                        <p>Interventions</p>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        💶
+                    </div>
+
+                    <div>
+                        <h3 id="nombreEnAttente">0</h3>
+                        <p>Devis en attente</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- DEMANDES DE DEVIS -->
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>📋 Dernières demandes de devis</h2>
+
+                        <p>
+                            Consultez les dernières demandes envoyées par vos clients.
+                        </p>
+                    </div>
+
+                    <a href="demandes.html" class="dashboard-btn">
+                        Voir les demandes
+                    </a>
+
+                </div>
+
+
+                <div class="dashboard-table">
+
+                    <div class="table-header">
+                        <span>Client</span>
+                        <span>Service</span>
+                        <span>Date</span>
+                        <span>Statut</span>
+                    </div>
+
+
+                    <!-- Les vraies demandes seront ajoutées ici -->
+                    <div id="listeDemandes">
+
+                        <div class="table-row">
+                            <span>
+                                Chargement...
+                            </span>
+
+                            <span>
+                                -
+                            </span>
+
+                            <span>
+                                -
+                            </span>
+
+                            <span>
+                                -
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- CLIENTS -->
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>👥 Clients</h2>
+
+                        <p>
+                            Gestion des clients Carron Eleck.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="client-admin-grid" id="listeClients">
+
+                    <div class="admin-client-card">
+
+                        <div>
+                            Chargement des clients...
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- INTERVENTIONS -->
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>🔧 Interventions</h2>
+
+                        <p>
+                            Suivez les interventions prévues.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="intervention-list" id="listeInterventions">
+
+                    <div class="intervention-card">
+
+                        <div class="intervention-info">
+                            <h3>Aucune intervention</h3>
+
+                            <p>
+                                Aucune intervention n'est actuellement enregistrée.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+
+    <!-- SCRIPT DU DASHBOARD -->
+    <script>
+
+        // =========================================================
+        // OUTIL : protéger le HTML contre les caractères spéciaux
+        // =========================================================
+
+        function echapperHTML(texte) {
+
+            if (texte === null || texte === undefined) {
+                return "";
+            }
+
+            return String(texte)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+
+        // =========================================================
+        // VÉRIFICATION ADMIN
+        // =========================================================
+
+        async function verifierAdmin() {
+
+            const {
+                data: { user },
+                error
+            } = await supabaseClient.auth.getUser();
+
+
+            // Pas connecté
+            if (error || !user) {
+
+                window.location.href = "connexion.html";
+
+                return null;
+            }
+
+
+            // Récupération du profil
+            const {
+                data: profile,
+                error: profileError
+            } = await supabaseClient
+                .from("profiles")
+                .select("id, email, prenom, nom, telephone, adresse, role")
+                .eq("id", user.id)
+                .single();
+
+
+            // Profil introuvable
+            if (profileError || !profile) {
+
+                window.location.href = "connexion.html";
+
+                return null;
+            }
+
+
+            // Ce n'est pas un admin
+            if (profile.role !== "admin") {
+
+                window.location.href = "client.html";
+
+                return null;
+            }
+
+
+            console.log("Administrateur connecté :", user.email);
+
+            return user;
+
+        }
+
+
+        // =========================================================
+        // CHARGER LE DASHBOARD
+        // =========================================================
+
+        async function chargerDashboard() {
+
+            // Vérification de l'admin
+            const user = await verifierAdmin();
+
+            if (!user) {
+                return;
+            }
+
+
+            // =====================================================
+            // RÉCUPÉRATION DES CLIENTS
+            // =====================================================
+
+            const {
+                data: profils,
+                error: profilsError
+            } = await supabaseClient
+                .from("profiles")
+                .select(
+                    "id, email, prenom, nom, telephone, adresse, role, created_at"
+                )
+                .eq("role", "client")
+                .order("created_at", {
+                    ascending: false
+                });
+
+
+            if (profilsError) {
+
+                console.error(
+                    "Erreur récupération clients :",
+                    profilsError
+                );
+
+                document.getElementById("listeClients").innerHTML = `
+                    <div class="admin-client-card">
+                        <div>
+                            Impossible de charger les clients.
+                        </div>
+                    </div>
+                `;
+
+            } else {
+
+                // Nombre de clients
+                document.getElementById("nombreClients").textContent =
+                    profils.length;
+
+
+                afficherClients(profils);
+            }
+
+
+            // =====================================================
+            // RÉCUPÉRATION DES DEVIS
+            // =====================================================
+
+            const {
+                data: devis,
+                error: devisError
+            } = await supabaseClient
+                .from("devis")
+                .select(`
+                    id,
+                    client_id,
+                    titre,
+                    service,
+                    description,
+                    statut,
+                    montant,
+                    created_at,
+                    date_souhaitee,
+                    horaire,
+                    adresse,
+                    nom,
+                    prenom,
+                    email,
+                    telephone
+                `)
+                .order("created_at", {
+                    ascending: false
+                });
+
+
+            if (devisError) {
+
+                console.error(
+                    "Erreur récupération devis :",
+                    devisError
+                );
+
+                document.getElementById("listeDemandes").innerHTML = `
+                    <div class="table-row">
+                        <span>
+                            Impossible de charger les demandes.
+                        </span>
+
+                        <span>-</span>
+                        <span>-</span>
+                        <span>-</span>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            // Nombre total de devis
+            document.getElementById("nombreDevis").textContent =
+                devis.length;
+
+
+            // Nombre de devis en attente
+            const devisEnAttente = devis.filter(
+                demande => demande.statut === "En attente"
+            );
+
+            document.getElementById("nombreEnAttente").textContent =
+                devisEnAttente.length;
+
+
+            // Affichage des dernières demandes
+            afficherDemandes(devis, profils);
+
+
+            // Pour l'instant, aucune table "interventions"
+            // n'existe dans ta base Supabase.
+            document.getElementById("nombreInterventions").textContent = "0";
+
+        }
+
+
+        // =========================================================
+        // AFFICHER LES CLIENTS
+        // =========================================================
+
+        function afficherClients(clients) {
+
+            const container =
+                document.getElementById("listeClients");
+
+
+            // Aucun client
+            if (!clients || clients.length === 0) {
+
+                container.innerHTML = `
+                    <div class="admin-client-card">
+
+                        <div class="admin-client-icon">
+                            👤
+                        </div>
+
+                        <div>
+                            <h3>Aucun client</h3>
+
+                            <p>
+                                Aucun compte client n'est encore enregistré.
+                            </p>
+                        </div>
+
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            // Création des cartes
+            container.innerHTML = clients.map(client => {
+
+                const prenom =
+                    echapperHTML(client.prenom);
+
+                const nom =
+                    echapperHTML(client.nom);
+
+                const email =
+                    echapperHTML(client.email);
+
+                const telephone =
+                    echapperHTML(client.telephone);
+
+
+                const nomComplet =
+                    `${prenom} ${nom}`.trim() || "Client";
+
+
+                return `
+                    <div class="admin-client-card">
+
+                        <div class="admin-client-icon">
+                            👤
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                ${nomComplet}
+                            </h3>
+
+                            <p>
+                                ${email}
+                            </p>
+
+                            <small>
+                                ${telephone || "Téléphone non renseigné"}
+                            </small>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("");
+
+        }
+
+
+        // =========================================================
+        // AFFICHER LES DEMANDES
+        // =========================================================
+
+        function afficherDemandes(devis, profils) {
+
+            const container =
+                document.getElementById("listeDemandes");
+
+
+            // Aucun devis
+            if (!devis || devis.length === 0) {
+
+                container.innerHTML = `
+                    <div class="table-row">
+
+                        <span>
+                            Aucune demande
+                        </span>
+
+                        <span>
+                            -
+                        </span>
+
+                        <span>
+                            -
+                        </span>
+
+                        <span>
+                            -
+                        </span>
+
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            // Seulement les 5 dernières demandes
+            const dernieresDemandes =
+                devis.slice(0, 5);
+
+
+            container.innerHTML =
+                dernieresDemandes.map(demande => {
+
+
+                    // Recherche du client correspondant
+                    const client =
+                        profils.find(
+                            profil =>
+                                profil.id === demande.client_id
+                        );
+
+
+                    let nomClient = "";
+
+
+                    if (client) {
+
+                        nomClient =
+                            `${client.prenom || ""} ${client.nom || ""}`.trim();
+
+                    }
+
+
+                    // Si le profil n'est pas trouvé,
+                    // on utilise les informations enregistrées
+                    // directement dans le devis.
+                    if (!nomClient) {
+
+                        nomClient =
+                            `${demande.prenom || ""} ${demande.nom || ""}`.trim();
+
+                    }
+
+
+                    if (!nomClient) {
+
+                        nomClient =
+                            demande.email || "Client";
+
+                    }
+
+
+                    // Service
+                    const service =
+                        demande.service ||
+                        demande.titre ||
+                        "Demande de devis";
+
+
+                    // Date
+                    const date =
+                        new Date(
+                            demande.created_at
+                        ).toLocaleDateString(
+                            "fr-FR"
+                        );
+
+
+                    // Statut
+                    const statut =
+                        demande.statut || "En attente";
+
+
+                    // Classe CSS du statut
+                    let classeStatut = "pending";
+
+
+                    if (statut === "Accepté") {
+                        classeStatut = "accepted";
+                    }
+
+
+                    return `
+                        <div class="table-row">
+
+                            <span>
+                                ${echapperHTML(nomClient)}
+                            </span>
+
+                            <span>
+                                ${echapperHTML(service)}
+                            </span>
+
+                            <span>
+                                ${echapperHTML(date)}
+                            </span>
+
+                            <span class="status ${classeStatut}">
+                                ${echapperHTML(statut)}
+                            </span>
+
+                        </div>
+                    `;
+
+                }).join("");
+
+        }
+
+
+        // =========================================================
+        // DÉCONNEXION
+        // =========================================================
+
+        async function deconnexion() {
+
+            const {
+                error
+            } = await supabaseClient.auth.signOut();
+
+
+            if (error) {
+
+                console.error(
+                    "Erreur de déconnexion :",
+                    error
+                );
+
+                return;
+            }
+
+
+            window.location.href =
+                "connexion.html";
+        }
+
+
+        // =========================================================
+        // LANCEMENT
+        // =========================================================
+
+        chargerDashboard();
+
+    </script>
+
+</body>
+
+</html>

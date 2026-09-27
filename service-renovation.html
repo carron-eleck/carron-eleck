@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rénovation électrique - Carron Eleck</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        html.auth-checking body {
+            visibility: hidden;
+        }
+
+        .service-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .service-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .service-title h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .service-title p {
+            color: #aaa;
+            font-size: 18px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.03);
+            opacity: 0.8;
+        }
+
+        .service-info {
+            background: #111827;
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
+
+        .service-info h2 {
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .service-info p {
+            color: #bbb;
+            line-height: 1.7;
+            font-size: 17px;
+        }
+
+        .service-info ul {
+            color: #bbb;
+            line-height: 2;
+            padding-left: 20px;
+        }
+
+        @media (max-width: 800px) {
+            .service-title h1 {
+                font-size: 32px;
+            }
+
+            .main-image {
+                height: 350px;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery img {
+                height: 220px;
+            }
+        }
+    </style>
+
+    <!-- Vérification de connexion Supabase -->
+    <script>
+        document.documentElement.classList.add("auth-checking");
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <script>
+        (async () => {
+            const { data, error } =
+                await supabaseClient.auth.getUser();
+
+            if (error || !data.user) {
+                window.location.replace("connexion.html");
+                return;
+            }
+
+            document.documentElement.classList.remove("auth-checking");
+        })();
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html" class="logo">
+            <img src="logo/logo.png" alt="Carron Eleck">
+            <span>Carron Eleck</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="presentation.html">Présentation</a>
+            <a href="services.html" class="active">Services</a>
+            <a href="devis.html">Devis</a>
+        </nav>
+    </header>
+
+    <main class="service-page">
+
+        <div class="service-title">
+            <h1>🏠 Rénovation électrique</h1>
+
+            <p>
+                Modernisez et sécurisez votre installation électrique.
+            </p>
+        </div>
+
+        <img
+            src="images/renovation1.jpg"
+            alt="Rénovation électrique"
+            class="main-image"
+            id="mainImage"
+        >
+
+        <div class="gallery">
+
+            <img
+                src="images/renovation1.jpg"
+                alt="Rénovation électrique"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation3.jpg"
+                alt="Travaux de rénovation électrique"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation4.jpg"
+                alt="Installation électrique rénovée"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation5.jpg"
+                alt="Tableau électrique"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation6.jpg"
+                alt="Rénovation d'une installation"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation7.jpg"
+                alt="Travaux électriques"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation8.jpg"
+                alt="Mise en conformité électrique"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation9.jpg"
+                alt="Rénovation électrique"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation10.jpg"
+                alt="Rénovation électrique"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation11.jpg"
+                alt="Rénovation électrique"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation12.jpg"
+                alt="Rénovation électrique"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation13.jpg"
+                alt="Rénovation électrique"
+                onclick="changeImage(this)"
+            >
+
+            <img
+                src="images/renovation14.jpg"
+                alt="Rénovation électrique"
+                onclick="changeImage(this)"
+            >
+
+        </div>
+
+        <div class="service-info">
+
+            <h2>Rénovation électrique</h2>
+
+            <p>
+                Carron Eleck réalise la rénovation et la modernisation
+                de vos installations électriques afin de les adapter
+                à vos besoins.
+            </p>
+
+            <p>
+                Nous pouvons notamment réaliser :
+            </p>
+
+            <ul>
+                <li>Rénovation complète de l'installation électrique</li>
+                <li>Remplacement des anciens câbles</li>
+                <li>Remplacement des prises et interrupteurs</li>
+                <li>Modernisation du tableau électrique</li>
+                <li>Mise en conformité de l'installation</li>
+                <li>Ajout de nouveaux circuits électriques</li>
+                <li>Amélioration de l'éclairage</li>
+            </ul>
+
+        </div>
+
+    </main>
+
+    <script>
+        function changeImage(image) {
+            document.getElementById("mainImage").src = image.src;
+        }
+    </script>
+
+</body>
+</html>

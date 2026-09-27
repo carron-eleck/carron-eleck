@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Présentation - Carron Eleck</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Masque la page pendant la vérification -->
+    <style>
+        html.auth-checking body {
+            visibility: hidden;
+        }
+    </style>
+
+    <script>
+        document.documentElement.classList.add("auth-checking");
+    </script>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <!-- VÉRIFICATION DE CONNEXION -->
+    <script>
+        (async () => {
+
+            const { data, error } =
+                await supabaseClient.auth.getUser();
+
+            if (error || !data.user) {
+                window.location.replace("connexion.html");
+                return;
+            }
+
+            // Utilisateur connecté : afficher la page
+            document.documentElement.classList.remove("auth-checking");
+
+        })();
+    </script>
+
+</head>
+
+<body>
+
+    <header>
+
+        <a href="index.html" class="logo">
+            <img src="logo/logo.png" alt="Carron Eleck">
+            <span>Carron Eleck</span>
+        </a>
+
+        <nav>
+
+            <a href="index.html">Accueil</a>
+
+            <a href="presentation.html" class="active">
+                Présentation
+            </a>
+
+            <a href="services.html">
+                Services
+            </a>
+
+            <a href="devis.html" id="lien-devis">Devis</a>
+
+            <a href="client.html" class="login-btn" id="espace-utilisateur">Mon espace</a>
+
+        </nav>
+
+    </header>
+
+    <main class="page">
+
+        <p class="small-title">
+            À PROPOS DE NOUS
+        </p>
+
+        <h1>
+            Présentation de <span>Carron Eleck</span>
+        </h1>
+
+        <p class="section-text">
+            Carron Eleck est une entreprise spécialisée dans
+            l'installation, le dépannage, la rénovation et
+            l'éclairage électrique.
+        </p>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <div class="icon">⚡</div>
+
+                <h2>
+                    Notre mission
+                </h2>
+
+                <p>
+                    Fournir des solutions électriques fiables,
+                    modernes et sécurisées.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <div class="icon">🛠️</div>
+
+                <h2>
+                    Notre savoir-faire
+                </h2>
+
+                <p>
+                    Des interventions réalisées avec sérieux,
+                    précision et professionnalisme.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <div class="icon">🤝</div>
+
+                <h2>
+                    Notre engagement
+                </h2>
+
+                <p>
+                    Être à l'écoute de chaque client et proposer
+                    des solutions adaptées à chaque projet.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+<script>
+(async () => {
+    const lienEspace = document.getElementById("espace-utilisateur");
+    const lienDevis = document.getElementById("lien-devis");
+
+    if (!lienEspace) return;
+
+    const { data: { user } } =
+        await supabaseClient.auth.getUser();
+
+    if (!user) {
+        window.location.replace("connexion.html");
+        return;
+    }
+
+    const { data: profil, error } = await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+    if (error) {
+        console.error("Erreur profil :", error);
+        return;
+    }
+
+    if (profil.role === "admin") {
+        // Admin
+        lienEspace.textContent = "Dashboard";
+        lienEspace.href = "dashboard.html";
+
+        // Cacher le bouton Devis
+        if (lienDevis) {
+            lienDevis.style.display = "none";
+        }
+
+    } else {
+        // Client
+        lienEspace.textContent = "Mon espace";
+        lienEspace.href = "client.html";
+
+        // Afficher le bouton Devis
+        if (lienDevis) {
+            lienDevis.style.display = "";
+        }
+    }
+})();
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Services - Carron Eleck</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Masque la page pendant la vérification -->
+    <style>
+        html.auth-checking body {
+            visibility: hidden;
+        }
+    </style>
+
+    <script>
+        document.documentElement.classList.add("auth-checking");
+    </script>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <!-- VÉRIFICATION DE CONNEXION -->
+    <script>
+        (async () => {
+
+            const { data, error } =
+                await supabaseClient.auth.getUser();
+
+            if (error || !data.user) {
+                window.location.replace("connexion.html");
+                return;
+            }
+
+            // Utilisateur connecté : afficher la page
+            document.documentElement.classList.remove("auth-checking");
+
+        })();
+    </script>
+
+</head>
+
+<body>
+
+<header>
+
+    <a href="index.html" class="logo">
+        <img src="logo/logo.png" alt="Carron Eleck">
+        <span>Carron Eleck</span>
+    </a>
+
+    <nav>
+
+        <a href="index.html">
+            Accueil
+        </a>
+
+        <a href="presentation.html">
+            Présentation
+        </a>
+
+        <a href="services.html" class="active">
+            Services
+        </a>
+
+         <a href="devis.html" id="lien-devis">Devis</a>
+         
+         <a href="client.html" class="login-btn" id="espace-utilisateur">Mon espace</a>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+    <section class="services">
+
+        <h1>
+            Nos services
+        </h1>
+
+        <p>
+            Des solutions électriques adaptées à vos besoins.
+        </p>
+
+
+        <div class="cards">
+
+
+            <!-- DÉPANNAGE -->
+
+            <a href="service-depannage.html" class="card">
+
+                <div class="icon">⚡</div>
+
+                <h2>
+                    Dépannage
+                </h2>
+
+                <p>
+                    Intervention pour vos pannes et problèmes électriques.
+                </p>
+
+            </a>
+
+
+            <!-- INSTALLATION -->
+
+            <a href="service-installation.html" class="card">
+
+                <div class="icon">🔧</div>
+
+                <h2>
+                    Installation
+                </h2>
+
+                <p>
+                    Installation électrique pour maisons et locaux professionnels.
+                </p>
+
+            </a>
+
+
+            <!-- RÉNOVATION -->
+
+            <a href="service-renovation.html" class="card">
+
+                <div class="icon">🏠</div>
+
+                <h2>
+                    Rénovation
+                </h2>
+
+                <p>
+                    Rénovation et modernisation de vos installations.
+                </p>
+
+            </a>
+
+
+            <!-- ÉCLAIRAGE -->
+
+            <a href="service-eclairage.html" class="card">
+
+                <div class="icon">💡</div>
+
+                <h2>
+                    Éclairage
+                </h2>
+
+                <p>
+                    Création et installation de vos systèmes d'éclairage.
+                </p>
+
+            </a>
+
+
+            <!-- LOCATION COMPTEUR DE CHANTIER -->
+
+            <a href="service-location.html" class="card">
+
+                <div class="icon">🏗️</div>
+
+                <h2>
+                    Location
+                </h2>
+
+                <p>
+                    Location de compteur de chantier pour vos travaux et projets.
+                </p>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+(async () => {
+    const lienEspace = document.getElementById("espace-utilisateur");
+    const lienDevis = document.getElementById("lien-devis");
+
+    if (!lienEspace) return;
+
+    const { data: { user } } =
+        await supabaseClient.auth.getUser();
+
+    if (!user) {
+        window.location.replace("connexion.html");
+        return;
+    }
+
+    const { data: profil, error } = await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+    if (error) {
+        console.error("Erreur profil :", error);
+        return;
+    }
+
+    if (profil.role === "admin") {
+        // Admin
+        lienEspace.textContent = "Dashboard";
+        lienEspace.href = "dashboard.html";
+
+        // Cacher le bouton Devis
+        if (lienDevis) {
+            lienDevis.style.display = "none";
+        }
+
+    } else {
+        // Client
+        lienEspace.textContent = "Mon espace";
+        lienEspace.href = "client.html";
+
+        // Afficher le bouton Devis
+        if (lienDevis) {
+            lienDevis.style.display = "";
+        }
+    }
+})();
+</script>
+
+</body>
+</html>

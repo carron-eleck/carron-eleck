@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Carron Eleck - Inscription</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <a href="index.html" class="logo">
+
+        <img src="logo/logo.png" alt="Carron Eleck">
+
+        <span>Carron Eleck</span>
+
+    </a>
+
+
+    <nav>
+
+        <a href="index.html">Accueil</a>
+
+        <a href="presentation.html">Présentation</a>
+
+        <a href="services.html">Services</a>
+
+        <a href="devis.html">Devis</a>
+
+        <a href="connexion.html" class="login-btn">
+            Connexion
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main class="login-page">
+
+    <div class="login-box">
+
+        <div class="login-icon">⚡</div>
+
+        <h1>Créer un compte</h1>
+
+        <p>Créez votre espace client Carron Eleck</p>
+
+
+        <form onsubmit="inscription(event)">
+
+
+            <!-- PRÉNOM -->
+
+            <label for="prenom">
+                Prénom
+            </label>
+
+            <input
+                type="text"
+                id="prenom"
+                placeholder="Votre prénom"
+                required
+            >
+
+
+            <!-- NOM -->
+
+            <label for="nom">
+                Nom
+            </label>
+
+            <input
+                type="text"
+                id="nom"
+                placeholder="Votre nom"
+                required
+            >
+
+
+            <!-- EMAIL -->
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="exemple@email.com"
+                required
+            >
+
+
+            <!-- TELEPHONE -->
+
+            <label for="telephone">
+                Téléphone
+            </label>
+
+            <input
+                type="tel"
+                id="telephone"
+                placeholder="06 12 34 56 78"
+                required
+            >
+
+
+            <!-- ADRESSE -->
+
+            <label for="adresse">
+                Adresse
+            </label>
+
+            <input
+                type="text"
+                id="adresse"
+                placeholder="Votre adresse"
+                required
+            >
+
+
+            <!-- MOT DE PASSE -->
+
+            <label for="password">
+                Mot de passe
+            </label>
+
+            <div class="password-container">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Votre mot de passe"
+                    required
+                    minlength="6"
+                >
+
+                <button
+                    type="button"
+                    onclick="voirMotDePasse('password')"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+
+            <!-- CONFIRMATION -->
+
+            <label for="confirmPassword">
+                Confirmer le mot de passe
+            </label>
+
+            <div class="password-container">
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirmez votre mot de passe"
+                    required
+                    minlength="6"
+                >
+
+                <button
+                    type="button"
+                    onclick="voirMotDePasse('confirmPassword')"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+
+            <!-- BOUTON -->
+
+            <button
+                type="submit"
+                class="login-submit"
+            >
+                Créer mon compte
+            </button>
+
+        </form>
+
+
+        <!-- MESSAGE -->
+
+        <p id="message"></p>
+
+
+        <!-- CONNEXION -->
+
+        <p style="margin-top: 20px;">
+
+            Vous avez déjà un compte ?
+
+            <a
+                href="connexion.html"
+                style="color: #00aaff; text-decoration: none;"
+            >
+                Se connecter
+            </a>
+
+        </p>
+
+
+        <a
+            href="index.html"
+            class="back"
+        >
+            ← Retour à l'accueil
+        </a>
+
+    </div>
+
+</main>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+/* ========================================
+   AFFICHER / CACHER LE MOT DE PASSE
+======================================== */
+
+function voirMotDePasse(id) {
+
+    const password =
+        document.getElementById(id);
+
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+    } else {
+
+        password.type = "password";
+
+    }
+
+}
+
+
+/* ========================================
+   INSCRIPTION
+======================================== */
+
+async function inscription(event) {
+
+    event.preventDefault();
+
+
+    const prenom =
+        document.getElementById("prenom").value.trim();
+
+    const nom =
+        document.getElementById("nom").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const telephone =
+        document.getElementById("telephone").value.trim();
+
+    const adresse =
+        document.getElementById("adresse").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    const message =
+        document.getElementById("message");
+
+
+    /* ========================================
+       VERIFICATION MOTS DE PASSE
+    ======================================== */
+
+    if (password !== confirmPassword) {
+
+        message.textContent =
+            "❌ Les mots de passe ne correspondent pas.";
+
+        message.style.color = "#ff4d4d";
+
+        return;
+
+    }
+
+
+    if (password.length < 6) {
+
+        message.textContent =
+            "❌ Le mot de passe doit contenir au moins 6 caractères.";
+
+        message.style.color = "#ff4d4d";
+
+        return;
+
+    }
+
+
+    /* ========================================
+       CHARGEMENT
+    ======================================== */
+
+    message.textContent =
+        "Création de votre compte...";
+
+    message.style.color = "";
+
+
+    /* ========================================
+       CREATION DU COMPTE SUPABASE
+    ======================================== */
+
+    const { data, error } =
+        await supabaseClient.auth.signUp({
+
+            email: email,
+
+            password: password,
+
+            options: {
+
+                data: {
+
+                    prenom: prenom,
+
+                    nom: nom,
+
+                    telephone: telephone,
+
+                    adresse: adresse
+
+                }
+
+            }
+
+        });
+
+
+    /* ========================================
+       ERREUR
+    ======================================== */
+
+    if (error) {
+
+        console.error(error);
+
+        if (
+            error.message
+                .toLowerCase()
+                .includes("already registered")
+        ) {
+
+            message.textContent =
+                "❌ Cette adresse e-mail possède déjà un compte.";
+
+        } else {
+
+            message.textContent =
+                "❌ Impossible de créer le compte.";
+
+        }
+
+        message.style.color = "#ff4d4d";
+
+        return;
+
+    }
+
+
+    /* ========================================
+       SUCCES
+    ======================================== */
+
+    message.textContent =
+        "✅ Compte créé avec succès !";
+
+    message.style.color = "#00cc66";
+
+
+    /*
+       Supabase peut demander une confirmation
+       de l'adresse e-mail avant la connexion.
+    */
+
+    setTimeout(() => {
+
+        window.location.href =
+            "connexion.html";
+
+    }, 2500);
+
+}
+
+</script>
+
+</body>
+
+</html>

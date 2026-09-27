@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carron Eleck - Connexion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <a href="index.html" class="logo">
+        <img src="logo/logo.png" alt="Carron Eleck">
+        <span>Carron Eleck</span>
+    </a>
+
+</header>
+
+
+<main class="login-page">
+
+    <div class="login-box">
+
+        <div class="login-icon">⚡</div>
+
+        <h1>Connexion</h1>
+
+        <p>Accédez à votre espace personnel</p>
+
+
+        <form onsubmit="connexion(event)">
+
+            <label for="email">Email</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="exemple@email.com"
+                required
+            >
+
+
+            <label for="password">Mot de passe</label>
+
+            <div class="password-container">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Votre mot de passe"
+                    required
+                >
+
+                <button
+                    type="button"
+                    onclick="voirMotDePasse()"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+
+            <!-- MOT DE PASSE OUBLIE -->
+
+            <div style="text-align: right; margin-top: 8px; margin-bottom: 15px;">
+
+                <a
+                    href="#"
+                    onclick="motDePasseOublie(event)"
+                    style="color: #00aaff; text-decoration: none;"
+                >
+                    Mot de passe oublié ?
+                </a>
+
+            </div>
+
+
+            <!-- CONNEXION -->
+
+            <button
+                type="submit"
+                class="login-submit"
+            >
+                Se connecter
+            </button>
+
+        </form>
+
+
+        <!-- CREATION DE COMPTE -->
+
+        <p style="margin-top: 20px;">
+
+            Vous n'avez pas encore de compte ?
+
+        </p>
+
+        <a
+            href="inscription.html"
+            class="login-submit"
+            style="
+                display: block;
+                text-align: center;
+                text-decoration: none;
+                box-sizing: border-box;
+                margin-top: 10px;
+            "
+        >
+            Créer un compte
+        </a>
+
+
+        <!-- MESSAGE -->
+
+        <p id="message"></p>
+
+
+    </div>
+
+</main>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+/* ========================================
+   AFFICHER / CACHER LE MOT DE PASSE
+======================================== */
+
+function voirMotDePasse() {
+
+    const password =
+        document.getElementById("password");
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+    } else {
+
+        password.type = "password";
+
+    }
+
+}
+
+
+/* ========================================
+   CONNEXION SUPABASE
+======================================== */
+
+async function connexion(event) {
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const message =
+        document.getElementById("message");
+
+
+    message.textContent =
+        "Connexion en cours...";
+
+    message.style.color = "";
+
+
+    const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+            password: password
+
+        });
+
+
+   if (error) {
+    console.error(error);
+
+    const loginBox = document.querySelector(".login-box");
+
+    // Relance l'animation même si elle vient déjà de se jouer
+    loginBox.classList.remove("login-error");
+    void loginBox.offsetWidth;
+    loginBox.classList.add("login-error");
+
+    message.textContent =
+        "❌ Email ou mot de passe incorrect.";
+    message.style.color = "#ff4d4d";
+
+    // Retire l'effet après l'animation
+    setTimeout(() => {
+        loginBox.classList.remove("login-error");
+    }, 1000);
+
+    return;
+}
+
+
+    const user = data.user;
+
+
+    /* ========================================
+       RECUPERATION DU PROFIL
+    ======================================== */
+
+    const { data: profile, error: profileError } =
+        await supabaseClient
+
+            .from("profiles")
+
+            .select("role")
+
+            .eq("id", user.id)
+
+            .single();
+
+
+    if (profileError) {
+
+        console.error(profileError);
+
+        message.textContent =
+            "❌ Impossible de récupérer votre profil.";
+
+        message.style.color = "#ff4d4d";
+
+        return;
+
+    }
+
+
+    /* ========================================
+       REDIRECTION SELON LE ROLE
+    ======================================== */
+
+    if (profile.role === "admin") {
+
+        window.location.href = "dashboard.html";
+
+    } else {
+
+        window.location.href = "client.html";
+
+    }
+
+}
+
+
+/* ========================================
+   MOT DE PASSE OUBLIE
+======================================== */
+
+async function motDePasseOublie(event) {
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const message =
+        document.getElementById("message");
+
+
+    if (!email) {
+
+        message.textContent =
+            "⚠️ Entre d'abord ton adresse e-mail.";
+
+        message.style.color = "#ffaa00";
+
+        document.getElementById("email").focus();
+
+        return;
+
+    }
+
+
+    message.textContent =
+        "Envoi de l'e-mail de récupération...";
+
+    message.style.color = "";
+
+
+    const { error } =
+        await supabaseClient.auth.resetPasswordForEmail(
+
+            email,
+
+            {
+                redirectTo:
+                    window.location.origin +
+                    "/nouveau-mot-de-passe.html"
+            }
+
+        );
+
+
+    if (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "❌ Impossible d'envoyer l'e-mail.";
+
+        message.style.color = "#ff4d4d";
+
+        return;
+
+    }
+
+
+    message.textContent =
+        "✅ Un e-mail de récupération vient d'être envoyé.";
+
+    message.style.color = "#00cc66";
+
+}
+
+</script>
+
+</body>
+</html>

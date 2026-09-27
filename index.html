@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Carron Eleck</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        html.auth-checking body {
+            visibility: hidden;
+        }
+    </style>
+
+    <script>
+        document.documentElement.classList.add("auth-checking");
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <script>
+        (async () => {
+
+            const { data, error } =
+                await supabaseClient.auth.getUser();
+
+            if (error || !data.user) {
+                window.location.replace("connexion.html");
+                return;
+            }
+
+            document.documentElement.classList.remove("auth-checking");
+
+        })();
+    </script>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <a href="index.html" class="logo">
+            <img src="logo/logo.png" alt="Carron Eleck">
+            <span>Carron Eleck</span>
+        </a>
+
+        <nav>
+
+            <a href="index.html" class="active">
+                Accueil
+            </a>
+
+            <a href="presentation.html">
+                Présentation
+            </a>
+
+            <a href="services.html">
+                Services
+            </a>
+
+            <a href="devis.html" id="lien-devis">
+                Devis
+            </a>
+
+            <a href="client.html"
+               class="login-btn"
+               id="espace-utilisateur">
+                Mon espace
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- HERO -->
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <p class="small-title">
+                    ⚡ ÉLECTRICIEN PROFESSIONNEL
+                </p>
+
+                <h1>
+                    Votre électricité,<br>
+                    <span>notre expertise.</span>
+                </h1>
+
+                <p>
+                    Carron Eleck vous accompagne pour vos travaux
+                    d'installation, de dépannage, de rénovation
+                    et d'éclairage électrique.
+                </p>
+
+
+                <div class="buttons">
+
+                    <a href="devis.html"
+                       class="btn"
+                       id="bouton-demande-devis">
+                        Demander un devis
+                    </a>
+
+                    <a href="services.html"
+                       class="second-btn">
+                        Découvrir nos services
+                    </a>
+
+                    <a href="presentation.html"
+                       class="second-btn">
+                        Notre entreprise
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- GESTION CLIENT / ADMIN -->
+    <script>
+
+        (async () => {
+
+            const lienEspace =
+                document.getElementById("espace-utilisateur");
+
+            const lienDevis =
+                document.getElementById("lien-devis");
+
+            const boutonDevis =
+                document.getElementById("bouton-demande-devis");
+
+
+            if (!lienEspace) return;
+
+
+            const { data: { user } } =
+                await supabaseClient.auth.getUser();
+
+
+            if (!user) {
+
+                window.location.replace("connexion.html");
+                return;
+
+            }
+
+
+            const { data: profil, error } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("role")
+                    .eq("id", user.id)
+                    .single();
+
+
+            if (error) {
+
+                console.error(
+                    "Erreur profil :",
+                    error
+                );
+
+                return;
+
+            }
+
+
+            /* =========================
+               ADMIN
+            ========================= */
+
+            if (profil.role === "admin") {
+
+                lienEspace.textContent =
+                    "Dashboard";
+
+                lienEspace.href =
+                    "dashboard.html";
+
+
+                /* Cache "Devis" dans le menu */
+
+                if (lienDevis) {
+
+                    lienDevis.style.display =
+                        "none";
+
+                }
+
+
+                /* Cache "Demander un devis" */
+
+                if (boutonDevis) {
+
+                    boutonDevis.style.display =
+                        "none";
+
+                }
+
+            }
+
+
+            /* =========================
+               CLIENT
+            ========================= */
+
+            else {
+
+                lienEspace.textContent =
+                    "Mon espace";
+
+                lienEspace.href =
+                    "client.html";
+
+
+                /* Affiche "Devis" */
+
+                if (lienDevis) {
+
+                    lienDevis.style.display =
+                        "";
+
+                }
+
+
+                /* Affiche "Demander un devis" */
+
+                if (boutonDevis) {
+
+                    boutonDevis.style.display =
+                        "";
+
+                }
+
+            }
+
+        })();
+
+    </script>
+
+</body>
+
+</html>

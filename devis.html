@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Carron Eleck - Demande de devis</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Cache la page pendant la vérification */
+        html.auth-checking body {
+            visibility: hidden;
+        }
+    </style>
+
+    <script>
+        document.documentElement.classList.add("auth-checking");
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <script>
+        (async () => {
+
+            const { data, error } =
+                await supabaseClient.auth.getUser();
+
+            if (error || !data.user) {
+                window.location.replace("connexion.html");
+                return;
+            }
+
+            document.documentElement.classList.remove("auth-checking");
+
+        })();
+    </script>
+
+</head>
+
+<body>
+
+<header>
+
+    <a href="index.html" class="logo">
+        <img src="logo/logo.png" alt="Carron Eleck">
+        <span>Carron Eleck</span>
+    </a>
+
+    <nav>
+
+        <a href="index.html">
+            Accueil
+        </a>
+
+        <a href="presentation.html">
+            Présentation
+        </a>
+
+        <a href="services.html">
+            Services
+        </a>
+
+        <a href="devis.html" class="active" id="lien-devis">
+            Devis
+        </a>
+
+        <a href="client.html"
+           class="login-btn"
+           id="espace-utilisateur">
+            Mon espace
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main class="page contact-page">
+
+    <p class="small-title">
+        DEMANDE DE DEVIS
+    </p>
+
+    <h1>
+        Votre projet, notre <span>expertise</span>
+    </h1>
+
+    <p class="section-text">
+        Décrivez votre besoin afin que Carron Eleck puisse étudier votre demande.
+    </p>
+
+
+    <form class="quote-form" id="quoteForm">
+
+        <!-- TYPE DE PRESTATION -->
+
+        <div class="form-section">
+
+            <h2>🔧 Votre besoin</h2>
+
+            <p class="form-description">
+                Quel type de prestation souhaitez-vous ?
+            </p>
+
+            <label for="service">
+                Type de prestation
+            </label>
+
+            <select id="service" required>
+
+                <option value="">
+                    Sélectionnez une prestation
+                </option>
+
+                <option value="Dépannage">
+                    🔧 Dépannage électrique
+                </option>
+
+                <option value="Installation">
+                    ⚡ Installation électrique
+                </option>
+
+                <option value="Rénovation">
+                    🏠 Rénovation électrique
+                </option>
+
+                <option value="Mise aux normes">
+                    📋 Mise aux normes
+                </option>
+
+                <option value="Location de compteur de chantier">
+                    🏗️ Location de compteur de chantier
+                </option>
+
+                <option value="Autre">
+                    ❓ Autre demande
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- INFORMATIONS CLIENT -->
+
+        <div class="form-section">
+
+            <h2>👤 Vos informations</h2>
+
+            <p class="form-description">
+                Ces informations nous permettront de vous contacter.
+            </p>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="nom">
+                        Nom
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nom"
+                        placeholder="Votre nom"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="prenom">
+                        Prénom
+                    </label>
+
+                    <input
+                        type="text"
+                        id="prenom"
+                        placeholder="Votre prénom"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="exemple@email.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="telephone">
+                        Téléphone
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="telephone"
+                        placeholder="06 12 34 56 78"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADRESSE -->
+
+        <div class="form-section">
+
+            <h2>📍 Lieu de l'intervention</h2>
+
+            <p class="form-description">
+                Indiquez où l'intervention doit avoir lieu.
+            </p>
+
+            <label for="adresse">
+                Adresse
+            </label>
+
+            <input
+                type="text"
+                id="adresse"
+                placeholder="12 rue Exemple, 33000 Bordeaux"
+                required
+            >
+
+        </div>
+
+
+        <!-- DATE -->
+
+        <div class="form-section">
+
+            <h2>📅 Disponibilité</h2>
+
+            <p class="form-description">
+                Indiquez quand vous souhaiteriez une intervention.
+            </p>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="date">
+                        Date souhaitée
+                    </label>
+
+                    <input
+                        type="date"
+                        id="date"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="horaire">
+                        Créneau souhaité
+                    </label>
+
+                    <select id="horaire" required>
+
+                        <option value="">
+                            Choisissez un créneau
+                        </option>
+
+                        <option value="Matin">
+                            🌅 Matin
+                        </option>
+
+                        <option value="Après-midi">
+                            ☀️ Après-midi
+                        </option>
+
+                        <option value="Soir">
+                            🌙 Soir
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="form-section">
+
+            <h2>📝 Description</h2>
+
+            <p class="form-description">
+                Expliquez-nous ce dont vous avez besoin.
+            </p>
+
+            <label for="description">
+                Votre demande
+            </label>
+
+            <textarea
+                id="description"
+                placeholder="Exemple : Je souhaite refaire l'installation électrique de ma maison..."
+                required
+            ></textarea>
+
+        </div>
+
+
+        <!-- BOUTON -->
+
+        <div class="quote-submit">
+
+            <button
+                type="submit"
+                class="main-btn"
+                id="submitButton"
+            >
+                ⚡ Envoyer ma demande
+            </button>
+
+            <p id="quoteMessage"></p>
+
+        </div>
+
+    </form>
+
+</main>
+
+
+<!-- MENU CLIENT / ADMIN -->
+
+<script>
+
+(async () => {
+
+    const lienEspace =
+        document.getElementById("espace-utilisateur");
+
+    const lienDevis =
+        document.getElementById("lien-devis");
+
+
+    if (!lienEspace) return;
+
+
+    const { data: { user } } =
+        await supabaseClient.auth.getUser();
+
+
+    if (!user) {
+
+        window.location.replace("connexion.html");
+        return;
+
+    }
+
+
+    const { data: profil, error } =
+        await supabaseClient
+            .from("profiles")
+            .select("role")
+            .eq("id", user.id)
+            .single();
+
+
+    if (error) {
+
+        console.error(
+            "Erreur profil :",
+            error
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       ADMIN
+    ========================= */
+
+    if (profil.role === "admin") {
+
+        lienEspace.textContent =
+            "Dashboard";
+
+        lienEspace.href =
+            "dashboard.html";
+
+
+        if (lienDevis) {
+
+            lienDevis.style.display =
+                "none";
+
+        }
+
+    }
+
+
+    /* =========================
+       CLIENT
+    ========================= */
+
+    else {
+
+        lienEspace.textContent =
+            "Mon espace";
+
+        lienEspace.href =
+            "client.html";
+
+
+        if (lienDevis) {
+
+            lienDevis.style.display =
+                "";
+
+        }
+
+    }
+
+})();
+
+</script>
+
+
+<!-- ENVOI DU FORMULAIRE -->
+
+<script>
+
+const quoteForm =
+    document.getElementById("quoteForm");
+
+const message =
+    document.getElementById("quoteMessage");
+
+const submitButton =
+    document.getElementById("submitButton");
+
+
+// Envoi du formulaire
+
+quoteForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        message.textContent = "";
+        message.style.color = "";
+
+
+        // Vérifie que l'utilisateur est toujours connecté
+
+        const { data: userData, error: userError } =
+            await supabaseClient.auth.getUser();
+
+
+        if (userError || !userData.user) {
+
+            window.location.replace(
+                "connexion.html"
+            );
+
+            return;
+
+        }
+
+
+        const user =
+            userData.user;
+
+
+        // Récupération des valeurs
+
+        const service =
+            document.getElementById("service").value;
+
+        const nom =
+            document.getElementById("nom").value.trim();
+
+        const prenom =
+            document.getElementById("prenom").value.trim();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const telephone =
+            document.getElementById("telephone").value.trim();
+
+        const adresse =
+            document.getElementById("adresse").value.trim();
+
+        const date =
+            document.getElementById("date").value;
+
+        const horaire =
+            document.getElementById("horaire").value;
+
+        const description =
+            document.getElementById("description").value.trim();
+
+
+        // Désactive le bouton
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+            "⏳ Envoi en cours...";
+
+
+        // Enregistrement dans Supabase
+
+        const { data, error } =
+            await supabaseClient
+                .from("devis")
+                .insert([
+                    {
+                        client_id: user.id,
+                        titre: service,
+                        service: service,
+                        nom: nom,
+                        prenom: prenom,
+                        email: email,
+                        telephone: telephone,
+                        adresse: adresse,
+                        date_souhaitee: date,
+                        horaire: horaire,
+                        description: description,
+                        statut: "En attente"
+                    }
+                ])
+                .select();
+
+
+        // Gestion de l'erreur
+
+        if (error) {
+
+            console.error(
+                "Erreur Supabase :",
+                error
+            );
+
+            message.textContent =
+                "❌ Une erreur est survenue lors de l'envoi de votre demande.";
+
+            message.style.color =
+                "#ef4444";
+
+            submitButton.disabled =
+                false;
+
+            submitButton.textContent =
+                "⚡ Envoyer ma demande";
+
+            return;
+
+        }
+
+
+        // Succès
+
+        console.log(
+            "Demande enregistrée :",
+            data
+        );
+
+        message.textContent =
+            "✅ Votre demande a bien été envoyée !";
+
+        message.style.color =
+            "#4ade80";
+
+
+        // Vide le formulaire
+
+        quoteForm.reset();
+
+
+        // Réactive le bouton
+
+        submitButton.disabled =
+            false;
+
+        submitButton.textContent =
+            "⚡ Envoyer ma demande";
+
+
+        // Redirection vers l'espace client
+
+        setTimeout(() => {
+
+            window.location.replace(
+                "client.html"
+            );
+
+        }, 1500);
+
+    }
+
+);
+
+</script>
+
+</body>
+
+</html>

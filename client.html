@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Espace client - Carron Eleck</title>
+
+    <meta
+        name="description"
+        content="Espace client Carron Eleck - Consultez votre profil et vos demandes de devis."
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body class="client-body">
+
+
+    <!-- HEADER -->
+
+    <header>
+
+        <a href="index.html" class="logo">
+
+            <img src="logo/logo.png" alt="Carron Eleck">
+
+            <span>Carron Eleck</span>
+
+        </a>
+
+
+        <nav>
+
+            <a href="index.html">
+                Accueil
+            </a>
+
+            <a href="presentation.html">
+                Présentation
+            </a>
+
+            <a href="services.html">
+                Services
+            </a>
+
+            <a href="devis.html">
+                Devis
+            </a>
+
+            <a href="client.html" class="active">
+                Espace client
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- ESPACE CLIENT -->
+
+    <main class="client-dashboard">
+
+
+        <!-- TITRE -->
+
+        <section class="client-welcome">
+
+            <p class="small-title">
+                ⚡ ESPACE CLIENT
+            </p>
+
+            <h1>
+                Bonjour <span id="clientPrenom">Client</span> 👋
+            </h1>
+
+            <p>
+                Retrouvez ici vos informations personnelles
+                et vos demandes de devis.
+            </p>
+
+        </section>
+
+
+
+        <!-- CONTENU -->
+
+        <section class="client-grid">
+
+
+            <!-- PROFIL -->
+
+            <div class="client-card">
+
+                <div class="client-card-title">
+
+                    <div class="client-icon">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Mon profil
+                        </h2>
+
+                        <p>
+                            Mes informations personnelles
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="client-info">
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Prénom
+                        </span>
+
+                        <strong id="profilePrenom">
+                            Chargement...
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Nom
+                        </span>
+
+                        <strong id="profileNom">
+                            Chargement...
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="info-row">
+
+                        <span>
+                            E-mail
+                        </span>
+
+                        <strong id="profileEmail">
+                            Chargement...
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Téléphone
+                        </span>
+
+                        <strong id="profileTelephone">
+                            Chargement...
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Adresse
+                        </span>
+
+                        <strong id="profileAdresse">
+                            Chargement...
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DEMANDES DE DEVIS -->
+
+            <div class="client-card quote-card">
+
+                <div class="client-card-title">
+
+                    <div class="client-icon">
+                        📋
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Mes demandes de devis
+                        </h2>
+
+                        <p>
+                            Vos demandes personnelles
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="mesDemandes">
+
+                    <p style="color:#8995a8;">
+                        Chargement de vos demandes...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- MESSAGE -->
+
+        <section class="client-message">
+
+            <div class="message-icon">
+                ⚡
+            </div>
+
+            <div>
+
+                <h2>
+                    Besoin d'une nouvelle intervention ?
+                </h2>
+
+                <p>
+                    Vous pouvez envoyer une nouvelle demande
+                    de devis à tout moment.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- DÉCONNEXION -->
+
+        <div style="text-align:center; margin-top:30px;">
+    <button
+        class="logout-btn"
+        id="logoutBtn"
+    >
+        Déconnexion
+    </button>
+</div>
+
+    </main>
+
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase-config.js"></script>
+
+
+
+    <script>
+
+
+    /* =====================================
+       CHARGEMENT DE L'ESPACE CLIENT
+    ===================================== */
+
+    async function chargerEspaceClient() {
+
+
+        /*
+            On récupère l'utilisateur actuellement
+            connecté dans Supabase.
+        */
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabaseClient.auth.getUser();
+
+
+
+        /* =====================================
+           UTILISATEUR NON CONNECTÉ
+        ===================================== */
+
+        if (userError || !user) {
+
+            window.location.href = "connexion.html";
+
+            return;
+
+        }
+
+
+
+        /* =====================================
+           RÉCUPÉRATION DU PROFIL
+        ===================================== */
+
+        const {
+            data: profile,
+            error: profileError
+        } = await supabaseClient
+
+            .from("profiles")
+
+            .select(
+                "id, email, prenom, nom, telephone, adresse, role"
+            )
+
+            .eq("id", user.id)
+
+            .single();
+
+
+
+        if (profileError) {
+
+            console.error(profileError);
+
+            document.getElementById("mesDemandes").innerHTML = `
+
+                <div class="quote-description">
+
+                    <h3>
+                        Erreur
+                    </h3>
+
+                    <p>
+                        Impossible de charger votre profil.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+
+        /* =====================================
+           VÉRIFICATION DU ROLE
+        ===================================== */
+
+        if (profile.role === "admin") {
+
+            /*
+                Si l'administrateur ouvre client.html,
+                on l'envoie vers son dashboard.
+            */
+
+            window.location.href = "dashboard.html";
+
+            return;
+
+        }
+
+
+
+        /* =====================================
+           AFFICHAGE DU PROFIL
+        ===================================== */
+
+        document.getElementById("clientPrenom")
+            .textContent = profile.prenom || "Client";
+
+
+        document.getElementById("profilePrenom")
+            .textContent = profile.prenom || "—";
+
+
+        document.getElementById("profileNom")
+            .textContent = profile.nom || "—";
+
+
+        document.getElementById("profileEmail")
+            .textContent = profile.email || user.email || "—";
+
+
+        document.getElementById("profileTelephone")
+            .textContent = profile.telephone || "—";
+
+
+        document.getElementById("profileAdresse")
+            .textContent = profile.adresse || "—";
+
+
+
+        /* =====================================
+           RÉCUPÉRATION DES DEVIS
+        ===================================== */
+
+        const {
+            data: devis,
+            error: devisError
+        } = await supabaseClient
+
+            .from("devis")
+
+            .select(
+                "id, service, titre, description, statut, created_at, date_souhaitee, horaire, adresse, montant"
+            )
+
+            .eq("client_id", user.id)
+
+            .order("created_at", {
+                ascending: false
+            });
+
+
+
+        if (devisError) {
+
+            console.error(devisError);
+
+            document.getElementById("mesDemandes").innerHTML = `
+
+                <div class="quote-description">
+
+                    <h3>
+                        Impossible de charger vos demandes
+                    </h3>
+
+                    <p>
+                        Une erreur est survenue lors du chargement.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+
+        afficherDevis(devis);
+
+    }
+
+
+
+    /* =====================================
+       AFFICHER LES DEVIS
+    ===================================== */
+
+    function afficherDevis(devis) {
+
+
+        const container =
+            document.getElementById("mesDemandes");
+
+
+
+        /* =====================================
+           AUCUN DEVIS
+        ===================================== */
+
+        if (!devis || devis.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="quote-description">
+
+                    <h3>
+                        Aucune demande de devis
+                    </h3>
+
+                    <p>
+                        Vous n'avez pas encore envoyé
+                        de demande de devis.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+
+        container.innerHTML = "";
+
+
+
+        /* =====================================
+           AFFICHAGE DES DEVIS
+        ===================================== */
+
+        devis.forEach(function(devisItem) {
+
+
+            const demandeHTML =
+                document.createElement("div");
+
+
+            demandeHTML.className =
+                "quote-content";
+
+
+
+            /* DATE DE CRÉATION */
+
+            let dateCreation = "—";
+
+
+            if (devisItem.created_at) {
+
+                dateCreation =
+                    new Date(
+                        devisItem.created_at
+                    ).toLocaleDateString(
+                        "fr-FR"
+                    );
+
+            }
+
+
+
+            /* DATE SOUHAITÉE */
+
+            let dateSouhaitee =
+                devisItem.date_souhaitee || "—";
+
+
+            if (
+                devisItem.date_souhaitee
+            ) {
+
+                dateSouhaitee =
+                    new Date(
+                        devisItem.date_souhaitee
+                    ).toLocaleDateString(
+                        "fr-FR"
+                    );
+
+            }
+
+
+
+            /* SERVICE */
+
+            const service =
+                devisItem.service ||
+                devisItem.titre ||
+                "Demande de devis";
+
+
+
+            /* STATUT */
+
+            const statut =
+                devisItem.statut ||
+                "En attente";
+
+
+
+            demandeHTML.innerHTML = `
+
+                <div class="quote-top">
+
+                    <div>
+
+                        <span class="quote-label">
+                            Type de prestation
+                        </span>
+
+                        <h3>
+                            ${echapperHTML(service)}
+                        </h3>
+
+                    </div>
+
+
+                    <span class="quote-status">
+                        ${echapperHTML(statut)}
+                    </span>
+
+                </div>
+
+
+
+                <div class="quote-details">
+
+
+                    <div>
+
+                        <span>
+                            Date de la demande
+                        </span>
+
+                        <strong>
+                            ${dateCreation}
+                        </strong>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <span>
+                            Date souhaitée
+                        </span>
+
+                        <strong>
+                            ${dateSouhaitee}
+                        </strong>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <span>
+                            Créneau
+                        </span>
+
+                        <strong>
+                            ${echapperHTML(
+                                devisItem.horaire || "—"
+                            )}
+                        </strong>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <span>
+                            Adresse
+                        </span>
+
+                        <strong>
+                            ${echapperHTML(
+                                devisItem.adresse || "—"
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="quote-description">
+
+                    <span>
+                        Description des travaux
+                    </span>
+
+                    <p>
+                        ${echapperHTML(
+                            devisItem.description || "Aucune description."
+                        )}
+                    </p>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                demandeHTML
+            );
+
+        });
+
+    }
+
+
+
+    /* =====================================
+       PROTECTION CONTRE LE HTML
+    ===================================== */
+
+    function echapperHTML(texte) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            texte == null
+                ? ""
+                : String(texte);
+
+        return div.innerHTML;
+
+    }
+
+
+
+    /* =====================================
+       DÉCONNEXION SUPABASE
+    ===================================== */
+
+    async function deconnexion() {
+
+
+        const {
+            error
+        } = await supabaseClient.auth.signOut();
+
+
+
+        if (error) {
+
+            console.error(error);
+
+            return;
+
+        }
+
+
+
+        window.location.href =
+            "connexion.html";
+
+    }
+
+
+
+    /* =====================================
+       BOUTON DÉCONNEXION
+    ===================================== */
+
+    document
+        .getElementById("logoutBtn")
+        .addEventListener(
+            "click",
+            deconnexion
+        );
+
+
+
+    /* =====================================
+       LANCEMENT
+    ===================================== */
+
+    chargerEspaceClient();
+
+
+    </script>
+
+
+</body>
+
+</html>
