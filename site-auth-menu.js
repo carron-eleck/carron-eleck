@@ -4,13 +4,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     const boutonDevis = document.getElementById("bouton-demande-devis");
     if (!lienEspace) return;
 
-    lienEspace.textContent = "Connexion";
-    lienEspace.href = "connexion.html";
+    // Ne jamais afficher « Connexion » par défaut : les pages du site sont protégées.
+    // Le bouton sera configuré uniquement après vérification de la session.
     if (!window.supabaseClient) return;
 
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) return;
+        if (!user) {
+            window.location.replace("connexion.html");
+            return;
+        }
 
         const { data: profil } = await supabaseClient
             .from("profiles")
