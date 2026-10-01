@@ -47,6 +47,23 @@
                 return;
             }
 
+            const { data: profile, error: profileError } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("role")
+                    .eq("id", data.user.id)
+                    .single();
+
+            if (profileError || !profile) {
+                window.location.replace("connexion.html");
+                return;
+            }
+
+            if (profile.role === "admin") {
+                window.location.replace("dashboard.html");
+                return;
+            }
+
             document.documentElement.classList.remove("auth-checking");
 
         })();

@@ -8,6 +8,11 @@
     <title>Rénovation électrique | Carron Eleck</title>
 
     <link rel="stylesheet" href="style.css">
+    <style>
+        html.auth-checking body {
+            visibility: hidden;
+        }
+    </style>
 
     <meta name="description" content="Rénovation électrique par Carron Eleck : amélioration, mise à niveau et adaptation de vos installations électriques.">
     <meta name="robots" content="index, follow">
@@ -22,6 +27,7 @@
 <!-- Vérification de connexion Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
+    <script src="auth-guard.js"></script>
 
 </head>
 
@@ -41,7 +47,7 @@
             <a href="index.html">Accueil</a>
             <a href="presentation.html">Présentation</a>
             <a href="services.html" class="active">Services</a>
-            <a href="devis.html">Devis</a>
+            <a href="devis.html" id="lien-devis">Devis</a>
         </nav>
     </header>
 
@@ -179,5 +185,6 @@
     </script>
 
     <script src="mobile-menu.js"></script>
+<script src="site-auth-menu.js"></script>
 </body>
 </html>

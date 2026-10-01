@@ -9,6 +9,11 @@
     <title>Installation électrique | Carron Eleck</title>
 
     <link rel="stylesheet" href="style.css">
+    <style>
+        html.auth-checking body {
+            visibility: hidden;
+        }
+    </style>
 
     <meta name="description" content="Installation électrique par Carron Eleck pour vos projets, avec des solutions adaptées à votre logement ou local.">
     <meta name="robots" content="index, follow">
@@ -26,6 +31,7 @@
 <!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
+    <script src="auth-guard.js"></script>
 
     <style>
 
@@ -165,7 +171,7 @@
                 Services
             </a>
 
-            <a href="devis.html">
+            <a href="devis.html" id="lien-devis">
                 Devis
             </a>
 
@@ -310,6 +316,7 @@
     </script>
 
     <script src="mobile-menu.js"></script>
+<script src="site-auth-menu.js"></script>
 </body>
 
 </html>
