@@ -6,42 +6,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Services - Carron Eleck</title>
+    <title>Services d'électricité | Carron Eleck</title>
 
     <link rel="stylesheet" href="style.css">
 
+    <meta name="description" content="Découvrez les services de Carron Eleck : dépannage électrique, installation, rénovation, éclairage et location de compteur de chantier.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#080b12">
+    <link rel="canonical" href="https://carron-eleck.github.io/carron-eleck/services.html">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Services d'électricité | Carron Eleck">
+    <meta property="og:description" content="Découvrez les services de Carron Eleck : dépannage électrique, installation, rénovation, éclairage et location de compteur de chantier.">
+    <meta property="og:url" content="https://carron-eleck.github.io/carron-eleck/services.html">
+    <meta property="og:image" content="https://carron-eleck.github.io/carron-eleck/logo/logo.png">
+
+
     <!-- Masque la page pendant la vérification -->
-    <style>
-        html.auth-checking body {
-            visibility: hidden;
-        }
-    </style>
-
-    <script>
-        document.documentElement.classList.add("auth-checking");
-    </script>
-
-    <!-- SUPABASE -->
+<!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
-
-    <!-- VÉRIFICATION DE CONNEXION -->
-    <script>
-        (async () => {
-
-            const { data, error } =
-                await supabaseClient.auth.getUser();
-
-            if (error || !data.user) {
-                window.location.replace("connexion.html");
-                return;
-            }
-
-            // Utilisateur connecté : afficher la page
-            document.documentElement.classList.remove("auth-checking");
-
-        })();
-    </script>
 
 </head>
 
@@ -54,7 +38,11 @@
         <span>Carron Eleck</span>
     </a>
 
-    <nav>
+    <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+</button>
+
+<nav>
 
         <a href="index.html">
             Accueil
@@ -183,55 +171,7 @@
     </section>
 
 </main>
-
-<script>
-(async () => {
-    const lienEspace = document.getElementById("espace-utilisateur");
-    const lienDevis = document.getElementById("lien-devis");
-
-    if (!lienEspace) return;
-
-    const { data: { user } } =
-        await supabaseClient.auth.getUser();
-
-    if (!user) {
-        window.location.replace("connexion.html");
-        return;
-    }
-
-    const { data: profil, error } = await supabaseClient
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
-
-    if (error) {
-        console.error("Erreur profil :", error);
-        return;
-    }
-
-    if (profil.role === "admin") {
-        // Admin
-        lienEspace.textContent = "Dashboard";
-        lienEspace.href = "dashboard.html";
-
-        // Cacher le bouton Devis
-        if (lienDevis) {
-            lienDevis.style.display = "none";
-        }
-
-    } else {
-        // Client
-        lienEspace.textContent = "Mon espace";
-        lienEspace.href = "client.html";
-
-        // Afficher le bouton Devis
-        if (lienDevis) {
-            lienDevis.style.display = "";
-        }
-    }
-})();
-</script>
-
+    <script src="mobile-menu.js"></script>
+    <script src="site-auth-menu.js"></script>
 </body>
 </html>

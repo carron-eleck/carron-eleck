@@ -5,38 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Carron Eleck</title>
+    <title>Carron Eleck | Électricien à Tarbes et dans les Hautes-Pyrénées</title>
 
     <link rel="stylesheet" href="style.css">
 
-    <style>
-        html.auth-checking body {
-            visibility: hidden;
-        }
-    </style>
-
-    <script>
-        document.documentElement.classList.add("auth-checking");
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta name="description" content="Carron Eleck, entreprise d'électricité à Tarbes et dans les Hautes-Pyrénées. Installation, dépannage, rénovation, éclairage et location de compteur de chantier.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#080b12">
+    <link rel="canonical" href="https://carron-eleck.github.io/carron-eleck/">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Carron Eleck | Électricien à Tarbes et dans les Hautes-Pyrénées">
+    <meta property="og:description" content="Carron Eleck, entreprise d'électricité à Tarbes et dans les Hautes-Pyrénées. Installation, dépannage, rénovation, éclairage et location de compteur de chantier.">
+    <meta property="og:url" content="https://carron-eleck.github.io/carron-eleck/">
+    <meta property="og:image" content="https://carron-eleck.github.io/carron-eleck/logo/logo.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
 
-    <script>
-        (async () => {
-
-            const { data, error } =
-                await supabaseClient.auth.getUser();
-
-            if (error || !data.user) {
-                window.location.replace("connexion.html");
-                return;
-            }
-
-            document.documentElement.classList.remove("auth-checking");
-
-        })();
-    </script>
 
 </head>
 
@@ -50,7 +35,11 @@
             <span>Carron Eleck</span>
         </a>
 
-        <nav>
+        <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+</button>
+
+<nav>
 
             <a href="index.html" class="active">
                 Accueil
@@ -130,128 +119,8 @@
 
 
     <!-- GESTION CLIENT / ADMIN -->
-    <script>
-
-        (async () => {
-
-            const lienEspace =
-                document.getElementById("espace-utilisateur");
-
-            const lienDevis =
-                document.getElementById("lien-devis");
-
-            const boutonDevis =
-                document.getElementById("bouton-demande-devis");
-
-
-            if (!lienEspace) return;
-
-
-            const { data: { user } } =
-                await supabaseClient.auth.getUser();
-
-
-            if (!user) {
-
-                window.location.replace("connexion.html");
-                return;
-
-            }
-
-
-            const { data: profil, error } =
-                await supabaseClient
-                    .from("profiles")
-                    .select("role")
-                    .eq("id", user.id)
-                    .single();
-
-
-            if (error) {
-
-                console.error(
-                    "Erreur profil :",
-                    error
-                );
-
-                return;
-
-            }
-
-
-            /* =========================
-               ADMIN
-            ========================= */
-
-            if (profil.role === "admin") {
-
-                lienEspace.textContent =
-                    "Dashboard";
-
-                lienEspace.href =
-                    "dashboard.html";
-
-
-                /* Cache "Devis" dans le menu */
-
-                if (lienDevis) {
-
-                    lienDevis.style.display =
-                        "none";
-
-                }
-
-
-                /* Cache "Demander un devis" */
-
-                if (boutonDevis) {
-
-                    boutonDevis.style.display =
-                        "none";
-
-                }
-
-            }
-
-
-            /* =========================
-               CLIENT
-            ========================= */
-
-            else {
-
-                lienEspace.textContent =
-                    "Mon espace";
-
-                lienEspace.href =
-                    "client.html";
-
-
-                /* Affiche "Devis" */
-
-                if (lienDevis) {
-
-                    lienDevis.style.display =
-                        "";
-
-                }
-
-
-                /* Affiche "Demander un devis" */
-
-                if (boutonDevis) {
-
-                    boutonDevis.style.display =
-                        "";
-
-                }
-
-            }
-
-        })();
-
-    </script>
-
+    <script src="mobile-menu.js"></script>
+    <script src="site-auth-menu.js"></script>
 </body>
 
 </html>

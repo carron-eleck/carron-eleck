@@ -6,42 +6,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dépannage électrique - Carron Eleck</title>
+    <title>Dépannage électrique à Tarbes | Carron Eleck</title>
 
     <link rel="stylesheet" href="style.css">
 
+    <meta name="description" content="Carron Eleck intervient pour le dépannage électrique : pannes, disjoncteurs, prises, interrupteurs, éclairage et recherche de panne.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#080b12">
+    <link rel="canonical" href="https://carron-eleck.github.io/carron-eleck/service-depannage.html">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Dépannage électrique à Tarbes | Carron Eleck">
+    <meta property="og:description" content="Carron Eleck intervient pour le dépannage électrique : pannes, disjoncteurs, prises, interrupteurs, éclairage et recherche de panne.">
+    <meta property="og:url" content="https://carron-eleck.github.io/carron-eleck/service-depannage.html">
+    <meta property="og:image" content="https://carron-eleck.github.io/carron-eleck/logo/logo.png">
+
+
     <!-- MASQUE LA PAGE PENDANT LA VÉRIFICATION -->
-    <style>
-        html.auth-checking body {
-            visibility: hidden;
-        }
-    </style>
-
-    <script>
-        document.documentElement.classList.add("auth-checking");
-    </script>
-
-    <!-- SUPABASE -->
+<!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
-
-    <!-- VÉRIFICATION DE CONNEXION -->
-    <script>
-        (async () => {
-
-            const { data, error } =
-                await supabaseClient.auth.getUser();
-
-            if (error || !data.user) {
-                window.location.replace("connexion.html");
-                return;
-            }
-
-            // Utilisateur connecté : afficher la page
-            document.documentElement.classList.remove("auth-checking");
-
-        })();
-    </script>
 
     <style>
         /* PAGE SERVICE */
@@ -69,8 +53,9 @@
         /* GRANDE IMAGE */
         .main-image {
             width: 100%;
-            height: 500px;
-            object-fit: cover;
+            height: auto;
+            max-height: none;
+            object-fit: contain;
             border-radius: 20px;
             display: block;
             margin-bottom: 15px;
@@ -165,7 +150,11 @@
             <span>Carron Eleck</span>
         </a>
 
-        <nav>
+        <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+</button>
+
+<nav>
 
             <a href="index.html">
                 Accueil
@@ -314,6 +303,7 @@
         }
     </script>
 
+    <script src="mobile-menu.js"></script>
 </body>
 
 </html>

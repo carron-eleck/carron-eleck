@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /client.html
+Disallow: /dashboard.html
+Disallow: /demandes.html
+Disallow: /devis.html
+Disallow: /connexion.html
+Disallow: /inscription.html
+
+Sitemap: https://carron-eleck.github.io/carron-eleck/sitemap.xml

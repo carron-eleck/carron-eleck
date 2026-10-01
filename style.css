@@ -2303,3 +2303,389 @@ footer {
         opacity: 0;
     }
 }
+
+/* =====================================================
+   📱 RESPONSIVE MOBILE — VERSION RENFORCÉE
+===================================================== */
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+}
+
+img {
+    max-width: 100%;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+    touch-action: manipulation;
+}
+
+/* MENU MOBILE */
+.menu-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 9px;
+    border: 1px solid #26344a;
+    border-radius: 10px;
+    background: #0d131e;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: #00aaff;
+    transition: transform .25s ease, opacity .25s ease;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 700px) {
+    header {
+        min-height: 70px;
+        height: auto;
+        padding: 10px 5%;
+        position: sticky;
+    }
+
+    .logo {
+        min-width: 0;
+        max-width: calc(100% - 55px);
+    }
+
+    .logo img {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+    }
+
+    .logo span {
+        font-size: 17px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .menu-toggle {
+        display: flex;
+        position: relative;
+        z-index: 202;
+    }
+
+    header nav {
+        display: none;
+        position: absolute;
+        top: calc(100% + 1px);
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 12px 5% 18px;
+        background: rgba(8, 11, 18, .98);
+        border-bottom: 1px solid #202938;
+        box-shadow: 0 15px 35px #00000055;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;
+        z-index: 201;
+    }
+
+    header nav.mobile-open {
+        display: flex;
+    }
+
+    header nav a {
+        display: flex !important;
+        width: 100%;
+        min-height: 46px;
+        padding: 11px 14px;
+        align-items: center;
+        border-radius: 9px;
+        font-size: 15px;
+    }
+
+    header nav a:hover,
+    header nav a.active {
+        background: #009dff12;
+    }
+
+    body.menu-open {
+        overflow: hidden;
+    }
+
+    /* ACCUEIL */
+    .hero {
+        min-height: calc(100vh - 70px);
+        padding: 55px 6%;
+        align-items: center;
+    }
+
+    .hero h1 {
+        font-size: clamp(38px, 12vw, 60px);
+        line-height: 1.05;
+        word-break: normal;
+    }
+
+    .hero p {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .buttons {
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .btn,
+    .main-btn,
+    .second-btn,
+    .login-submit,
+    .quote-submit button {
+        min-height: 48px;
+    }
+
+    /* PAGES */
+    .page,
+    .services {
+        padding: 50px 6%;
+    }
+
+    .page h1,
+    .services h1 {
+        font-size: clamp(30px, 9vw, 42px);
+        line-height: 1.1;
+    }
+
+    .cards {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+    }
+
+    .card {
+        width: 100%;
+        max-width: none;
+    }
+
+    /* FORMULAIRES */
+    .quote-form {
+        width: 100%;
+        margin-top: 25px;
+    }
+
+    .form-section {
+        padding: 20px 16px;
+        border-radius: 14px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px;
+    }
+
+    .form-section input,
+    .form-section select,
+    .form-section textarea {
+        min-height: 48px;
+        font-size: 16px;
+    }
+
+    .form-section textarea {
+        min-height: 150px;
+    }
+
+    /* CONNEXION / INSCRIPTION */
+    .login-page {
+        min-height: calc(100vh - 70px);
+        padding: 35px 16px;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 480px;
+        padding: 26px 18px;
+        border-radius: 16px;
+    }
+
+    .password-container input {
+        min-width: 0;
+    }
+
+    /* SERVICE */
+    .service-page {
+        width: 100%;
+        padding: 40px 16px 60px;
+    }
+
+    .service-title h1 {
+        font-size: clamp(28px, 8vw, 40px);
+        line-height: 1.15;
+    }
+
+    .service-title p {
+        font-size: 16px;
+    }
+
+    .service-info {
+        padding: 20px 0;
+    }
+
+    .main-image {
+        width: 100%;
+        height: auto !important;
+        max-height: none !important;
+        object-fit: contain !important;
+    }
+
+    .gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .gallery img {
+        width: 100%;
+        height: auto !important;
+        max-height: none !important;
+    }
+
+    /* CLIENT / ADMIN */
+    .client-dashboard,
+    .dashboard-content,
+    .demandes-container {
+        width: 92%;
+        max-width: none;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .client-welcome h1,
+    .dashboard-title h1,
+    .demandes-title h1 {
+        font-size: clamp(28px, 8vw, 40px);
+        line-height: 1.15;
+    }
+
+    .dashboard-stats,
+    .client-grid,
+    .client-admin-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .dashboard-section,
+    .demande-card,
+    .client-card {
+        border-radius: 14px;
+        padding: 18px;
+    }
+
+    .dashboard-table {
+        overflow-x: visible;
+    }
+
+    .table-header {
+        display: none !important;
+    }
+
+    .table-row {
+        grid-template-columns: 1fr !important;
+        gap: 8px;
+        padding: 16px 0;
+    }
+
+    .demande-header {
+        gap: 12px;
+    }
+
+    .demande-details {
+        grid-template-columns: 1fr !important;
+    }
+
+    .demande-actions {
+        flex-direction: column;
+    }
+
+    .demande-actions button {
+        width: 100%;
+        min-height: 46px;
+    }
+
+    .logout-btn,
+    .dashboard-btn,
+    .back-dashboard {
+        min-height: 46px;
+    }
+}
+
+@media (max-width: 420px) {
+    .hero {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .hero h1 {
+        font-size: 37px;
+    }
+
+    .logo span {
+        font-size: 16px;
+    }
+
+    .service-page,
+    .login-page {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .form-section,
+    .login-box,
+    .demande-card,
+    .client-card,
+    .dashboard-section {
+        padding: 16px;
+    }
+
+    .gallery {
+        gap: 7px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}
